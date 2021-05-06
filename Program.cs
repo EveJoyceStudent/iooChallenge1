@@ -117,21 +117,30 @@ namespace challenge1
 
             while(!examine){
 
-                Console.Write("select a roll number to add to list of rolls to examine, or type \"examine\" to examine: ");
-                string examineInput=Console.ReadLine();
-                if(examineInput.ToLower()=="e"||examineInput.ToLower()=="examine"){
-                    examine=true;
-                }
-                if (int.TryParse(examineInput, out examineNumber)){
-                    if(diceListExamine.Contains(examineNumber)){
-                        Console.WriteLine("roll already in examine list");
-                    } else if(examineNumber<=diceList.Count && examineNumber>=1){
-                        diceListExamine.Add(examineNumber);
-                        Console.WriteLine("added roll "+examineNumber+" (value: "+diceList[examineNumber-1]+") to examination list");
-                    } else {
-                        Console.WriteLine("sorry, i didn't understand that");
+                Console.Write("select a roll number to add that many rolls to examine: ");
+                examineNumber=NumberInput();
+                if(examineNumber<=diceList.Count && examineNumber>=1){
+                    for(int j=0; j<examineNumber; j++){
+                        diceListExamine.Add(j+1);
                     }
+                    examine=true;
+                } else {
+                    Console.WriteLine("number was too large or small, input a number");
                 }
+
+                // if(examineInput.ToLower()=="e"||examineInput.ToLower()=="examine"){
+                //     examine=true;
+                // }
+                // if (int.TryParse(examineInput, out examineNumber)){
+                //     if(diceListExamine.Contains(examineNumber)){
+                //         Console.WriteLine("roll already in examine list");
+                //     } else if(examineNumber<=diceList.Count && examineNumber>=1){
+                //         diceListExamine.Add(examineNumber);
+                //         Console.WriteLine("added roll "+examineNumber+" (value: "+diceList[examineNumber-1]+") to examination list");
+                //     } else {
+                //         Console.WriteLine("sorry, i didn't understand that");
+                //     }
+                // }
             }
             return diceListExamine;
         }
