@@ -15,9 +15,12 @@ namespace challenge1
 
             Console.WriteLine("welcome to diceroller dx");
 
-            // Console.Write("how many dice would you like to roll each time? ");
-            // int noOfDice = NumberInput();
-
+            Console.Write("how many dice would you like to roll each time? ");
+            int noOfDice = NumberInput();
+            while (noOfDice<1){
+                Console.WriteLine("can only roll positive number of dice");
+                noOfDice = NumberInput();
+            }
             
             // 2.	Allow the user to select how many sides are on the die to be rolled.
             Console.Write("how many sides should each dice have? ");
@@ -35,16 +38,16 @@ namespace challenge1
 
             while(rollInput=="r"){
             // 2.	Store the dice rolls
-                RollFunction(diceList, sidesOfDice);
+                RollFunction(diceList, sidesOfDice, noOfDice);
                 Console.Write("type \"roll\" to roll, or type \"stop\" to stop rolling and examine dice rolls: ");
                 rollInput = RollInput();
             } 
             // 3.	When user chooses, stop
             // i.e. when rollInput isn't r, it will be s, i.e. stop
-            StopFunction(diceList);
+            StopFunction(diceList, noOfDice);
             
             // 4.	Allow user to enter number of rolls to examine
-            List<int> diceListToExamine = ExamineInput(diceList);
+            List<int> diceListToExamine = ExamineInput(diceList, noOfDice);
                         
             // 5.	From the stored rolls, calculate
             ExamineOutput(diceList,diceListToExamine);            
@@ -87,23 +90,31 @@ namespace challenge1
             }
             return rollInput;
         }
-        static void RollFunction(List<int> diceList, int sidesOfDice){
+        static void RollFunction(List<int> diceList, int sidesOfDice, int noOfDice){
             var random = new Random();
 
-            int num = random.Next(1,sidesOfDice+1);
-            
-            diceList.Add(num);
+            Console.Write("rolled ");
+            for(int i=0;i<noOfDice;i++){
 
-            Console.WriteLine("rolled "+num);
+                int num = random.Next(1,sidesOfDice+1);  
+                diceList.Add(num);
+                Console.Write(num+" ");
+
+            }
+            Console.WriteLine("");
         }
-        static void StopFunction(List<int> diceList){
+        static void StopFunction(List<int> diceList, int noOfDice){
             Console.WriteLine("you rolled: ");
-            for(int i = 0; i < diceList.Count; i++){
-                Console.WriteLine("roll "+(i+1)+": "+diceList[i]);
+            for(int i = 0; i < diceList.Count/noOfDice; i++){
+                Console.Write("roll "+(i+1)+": ");
+                for(int j = 0; j<noOfDice;j++){
+                    Console.Write(diceList[i*noOfDice+j]+" ");
+                }
+                Console.WriteLine("");
             }
         }
 
-        static List<int> ExamineInput(List<int> diceList){
+        static List<int> ExamineInput(List<int> diceList, int noOfDice){
             // when this is true, move to examine output
             bool examine = false;
 
@@ -119,8 +130,8 @@ namespace challenge1
 
                 Console.Write("select a roll number to add that many rolls to examine: ");
                 examineNumber=NumberInput();
-                if(examineNumber<=diceList.Count && examineNumber>=1){
-                    for(int j=0; j<examineNumber; j++){
+                if(examineNumber<=diceList.Count/noOfDice && examineNumber>=1){
+                    for(int j=0; j<examineNumber*noOfDice; j++){
                         diceListExamine.Add(j+1);
                     }
                     examine=true;
